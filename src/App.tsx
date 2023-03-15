@@ -3,11 +3,28 @@ import axios from "axios";
 import "./App.css";
 import Wilder, { IWilderProps } from "./components/Wilder";
 
-const formatWildersFromApi = (wilders: any) =>
-  wilders.map((wilder: any) => {
+interface ISkillFromAPI {
+  id: number;
+  name: string;
+}
+
+interface IGradeFromAPI {
+  grade: number;
+  skill: ISkillFromAPI;
+}
+
+interface IWilderFromAPI {
+  name: string;
+  id: number;
+  grades: IGradeFromAPI[];
+}
+
+const formatWildersFromApi = (wilders: IWilderFromAPI[]): IWilderProps[] =>
+  wilders.map((wilder) => {
     return {
+      id: wilder.id,
       name: wilder.name,
-      skills: wilder.grades.map((grade: any) => {
+      skills: wilder.grades.map((grade) => {
         return { votes: grade.grade, title: grade.skill.name };
       }),
     };
@@ -17,8 +34,11 @@ function App() {
   const [wilders, setWilders] = useState<IWilderProps[]>([]);
   useEffect(() => {
     const fetchWilders = async () => {
-      const apiWilders = await axios.get("http://localhost:5000/api/wilder");
-      setWilders(formatWildersFromApi(apiWilders.data));
+      const wilderFromApi = await axios.get<IWilderFromAPI[]>(
+        "http://localhost:5000/api/wilder"
+      );
+      console.log(wilderFromApi);
+      setWilders(formatWildersFromApi(wilderFromApi.data));
     };
     fetchWilders();
   }, []);
@@ -40,7 +60,7 @@ function App() {
       </main>
       <footer>
         <div className="container">
-          <p>&copy; 2022 Wild Code School</p>
+          <p>&copy; 2023 Wild Code School</p>
         </div>
       </footer>
     </div>
