@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./App.css";
 import Wilder, { IWilderProps } from "./components/Wilder";
+import AddGradeForm from "./components/AddGradeForm";
 
 interface ISkillFromAPI {
   id: number;
@@ -51,6 +52,7 @@ function App() {
         </div>
       </header>
       <main className="container">
+        <AddGradeForm />
         <h2>Wilders</h2>
         <section className="card-row">
           {wilders.map((wilder) => {
