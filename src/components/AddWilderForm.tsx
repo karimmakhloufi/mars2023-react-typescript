@@ -1,17 +1,22 @@
 import { useState } from "react";
 import axios from "axios";
 
-const AddWilderForm = () => {
+const AddWilderForm = ({
+  setLastUpdate,
+}: {
+  setLastUpdate: React.Dispatch<React.SetStateAction<number>>;
+}) => {
   const [wilderName, setName] = useState("");
   const [city, setCity] = useState("");
   return (
     <form
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault();
-        axios.post("http://localhost:5000/api/wilder", {
+        await axios.post("http://localhost:5000/api/wilder", {
           name: wilderName,
           city: city,
         });
+        setLastUpdate(new Date().getTime());
       }}
     >
       <h3>Add Wilder</h3>

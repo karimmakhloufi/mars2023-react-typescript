@@ -3,6 +3,7 @@ import axios from "axios";
 import "./App.css";
 import Wilder, { IWilderProps } from "./components/Wilder";
 import AddGradeForm from "./components/AddGradeForm";
+import AddWilderForm from "./components/AddWilderForm";
 
 interface ISkillFromAPI {
   id: number;
@@ -33,6 +34,7 @@ const formatWildersFromApi = (wilders: IWilderFromAPI[]): IWilderProps[] =>
 
 function App() {
   const [wilders, setWilders] = useState<IWilderProps[]>([]);
+  const [lastUpdate, setLastUpdate] = useState(new Date().getTime());
   useEffect(() => {
     const fetchWilders = async () => {
       const wilderFromApi = await axios.get<IWilderFromAPI[]>(
@@ -42,7 +44,7 @@ function App() {
       setWilders(formatWildersFromApi(wilderFromApi.data));
     };
     fetchWilders();
-  }, []);
+  }, [lastUpdate]);
 
   return (
     <div>
@@ -53,6 +55,7 @@ function App() {
       </header>
       <main className="container">
         <AddGradeForm />
+        <AddWilderForm setLastUpdate={setLastUpdate} />
         <h2>Wilders</h2>
         <section className="card-row">
           {wilders.map((wilder) => {
